@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 
 import nuudelchin.club.web.dto.JoinDTO;
 import nuudelchin.club.web.entity.UserEntity;
-import nuudelchin.club.web.repository.UserRepository;
+import nuudelchin.club.web.mapper.UserMapper;
 
 @Service
 public class JoinService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -21,7 +21,7 @@ public class JoinService {
     public void joinProc(JoinDTO dto) {
 
 
-    	UserEntity userEntity = userRepository.findByUsername(dto.getUsername());
+    	UserEntity userEntity = userMapper.selectByUsername(dto.getUsername());
         if (userEntity == null) {
         	
         	userEntity = new UserEntity();
@@ -30,7 +30,7 @@ public class JoinService {
         	userEntity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         	userEntity.setRole("ROLE_ADMIN");
 
-            userRepository.save(userEntity);
+            userMapper.insert(userEntity);
         }
     }
 }

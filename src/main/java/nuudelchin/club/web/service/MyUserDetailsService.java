@@ -5,28 +5,28 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import nuudelchin.club.web.dto.CustomUserDetails;
+import nuudelchin.club.web.dto.MyUserDetails;
 import nuudelchin.club.web.entity.UserEntity;
-import nuudelchin.club.web.repository.UserRepository;
+import nuudelchin.club.web.mapper.UserMapper;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
-	private final UserRepository userRepository;
+	private final UserMapper userMapper;
 	
-	public CustomUserDetailsService(UserRepository userRepository) {
+	public MyUserDetailsService(UserMapper userMapper) {
 
-        this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		UserEntity userEntity = userRepository.findByUsername(username);
+		UserEntity userEntity = userMapper.selectByUsername(username);
 		
 		if (userEntity != null) {
 			
-			return new CustomUserDetails(userEntity);
+			return new MyUserDetails(userEntity);
 		}
 		
 		return null;
